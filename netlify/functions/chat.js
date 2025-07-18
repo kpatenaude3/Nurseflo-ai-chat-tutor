@@ -11,17 +11,16 @@ exports.handler = async function (event) {
         'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
-        model: 'gpt-3.5-turbo',  // Use gpt-3.5-turbo if gpt-4 isn't enabled
+        model: 'gpt-3.5-turbo',  // safer default
         messages: [
-          {
-            role: 'user',
-            content: body.message,
-          },
+          { role: 'user', content: body.message },
         ],
       }),
     });
 
     const data = await response.json();
+
+    console.log('OpenAI response:', JSON.stringify(data)); // 👈 add this line
 
     return {
       statusCode: 200,
@@ -30,6 +29,7 @@ exports.handler = async function (event) {
       }),
     };
   } catch (error) {
+    console.error('Function error:', error.message);
     return {
       statusCode: 500,
       body: JSON.stringify({
