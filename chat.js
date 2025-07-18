@@ -1,5 +1,5 @@
 const fetch = require('node-fetch');
-
+npm install node-fetch
 exports.handler = async function (event) {
   try {
     const body = JSON.parse(event.body);
