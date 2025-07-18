@@ -1,10 +1,13 @@
 {
-  "name": "nurseflo-chat-tutor",
+  "name": "nurseflo-ai-chat-tutor",
   "version": "1.0.0",
-  "description": "NurseFlo AI Chat Tutor Function",
+  "description": "AI chat tutor for nursing education using OpenAI API",
   "main": "chat.js",
-  "type": "module",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node chat.js"
+  },
   "dependencies": {
-    "node-fetch": "^3.3.2"
+    "node-fetch": "^2.6.7"
   }
 }
