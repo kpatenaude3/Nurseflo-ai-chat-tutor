@@ -11,30 +11,30 @@ exports.handler = async function(event) {
         'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
-        model: 'gpt-3.5-turbo', // fallback model if gpt-4 fails
+        model: 'gpt-4',
         messages: [{ role: 'user', content: body.message }],
       }),
     });
 
-    const data = await response.json();
-
-    if (!response.ok) {
+    const contentType = response.headers.get("content-type") || "";
+    if (!response.ok || !contentType.includes("application/json")) {
+      const errorText = await response.text();
       return {
-        statusCode: response.status,
-        body: JSON.stringify({ error: data }),
+        statusCode: 500,
+        body: JSON.stringify({ error: "OpenAI API error", details: errorText }),
       };
     }
 
+    const data = await response.json();
     return {
       statusCode: 200,
-      body: JSON.stringify({
-        reply: data.choices?.[0]?.message?.content || "No reply.",
-      }),
+      body: JSON.stringify({ reply: data.choices?.[0]?.message?.content || "No reply." }),
     };
+
   } catch (error) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: error.message || 'Unknown error' }),
+      body: JSON.stringify({ error: "Server error", details: error.message }),
     };
   }
 };
